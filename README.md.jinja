@@ -1,3 +1,4 @@
+{%- if graft_docs %}{% set ps = "vendor/python-starter" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-starter/blob/" ~ _copier_conf.vcs_ref_hash %}{%- endif %}
 # {{ project_name }}
 
 {{ project_description }}
@@ -140,7 +141,7 @@ Benefits:
 5. Add CLI commands in `src/{{ package_name }}/cli/commands/`
 6. Write tests in `tests/`
 
-See [docs/guides/development.md](docs/guides/development.md) for detailed instructions.
+See [docs/guides/development.md]({{ ps }}/docs/guides/development.md) for detailed instructions.
 
 ### Daily Development
 
@@ -162,13 +163,13 @@ uv run {{ cli_command }} <command>
 
 Each architectural decision is documented with rationale:
 
-- [Why uv?](docs/decisions/001-why-uv.md) - Fast, modern package management
-- [Why src layout?](docs/decisions/002-src-layout.md) - Clear boundaries
-- [Why Protocols?](docs/decisions/003-protocol-di.md) - Pythonic DI
-- [Why functional services?](docs/decisions/004-functional-services.md) - Simplicity and testability
-- [Why context objects?](docs/decisions/005-context-objects.md) - Explicit dependencies
-- [Why Typer?](docs/decisions/006-typer-cli.md) - Modern CLI framework
-- [Why ruff?](docs/decisions/007-ruff-tooling.md) - Fast, unified tooling
+- [Why uv?]({{ ps }}/docs/decisions/001-why-uv.md) - Fast, modern package management
+- [Why src layout?]({{ ps }}/docs/decisions/002-src-layout.md) - Clear boundaries
+- [Why Protocols?]({{ ps }}/docs/decisions/003-protocol-di.md) - Pythonic DI
+- [Why functional services?]({{ ps }}/docs/decisions/004-functional-services.md) - Simplicity and testability
+- [Why context objects?]({{ ps }}/docs/decisions/005-context-objects.md) - Explicit dependencies
+- [Why Typer?]({{ ps }}/docs/decisions/006-typer-cli.md) - Modern CLI framework
+- [Why ruff?]({{ ps }}/docs/decisions/007-ruff-tooling.md) - Fast, unified tooling
 
 ## Contributing
 
@@ -186,10 +187,10 @@ MIT License - see LICENSE file for details.
 
 ## Resources
 
-- [Architecture Documentation](docs/architecture/architecture.md)
-- [API Reference](docs/reference/project-reference.md)
-- [Development Guides](docs/guides/getting-started.md)
-- [Architectural Decisions](docs/decisions/)
+- [Architecture Documentation]({{ ps }}/docs/architecture/architecture.md)
+- [API Reference]({{ ps }}/docs/reference/project-reference.md)
+- [Development Guides]({{ ps }}/docs/guides/getting-started.md)
+- [Architectural Decisions]({{ ps }}/docs/decisions/)
 
 ---
 
