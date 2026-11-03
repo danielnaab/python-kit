@@ -118,7 +118,7 @@ include_dev_scripts:
 graft_docs:
   type: bool
   help: >-
-    Graft pinned copies of python-starter's pattern docs and meta-knowledge-base into vendor/?
+    Graft pinned copies of python-starter's pattern docs and meta-knowledge-base into scions/?
     Needs Nix. Without it, docs link to GitHub at this template's commit instead.
   default: true
 

@@ -7,7 +7,7 @@ entrypoints:
   agent: docs/agents.md
 
 # Follows meta-knowledge-base (https://github.com/danielnaab/meta-knowledge-base). Projects generated
-# from this template graft it, and this template's pattern docs, into vendor/ (copier.yml graft_docs).
+# from this template graft it, and this template's pattern docs, into scions/ (copier.yml graft_docs).
 
 paths:
   architecture: docs/architecture/

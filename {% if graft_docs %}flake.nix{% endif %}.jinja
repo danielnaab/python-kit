@@ -2,7 +2,7 @@
   description = "{{ project_name }}";
 
   # graft (https://github.com/danielnaab/graft/tree/v2) copies pinned exports of the docs this project
-  # follows into vendor/: `nix run .#graft`, then commit vendor/. `nix flake check` fails if vendor/
+  # follows into scions/: `nix run .#graft`, then commit scions/. `nix flake check` fails if scions/
   # drifts from flake.lock. Upgrade one: change its ref, `nix flake update <name>`, `nix run .#graft`.
   inputs.graft.url = "github:danielnaab/graft/v2";
   inputs.meta-knowledge-base = {
@@ -10,7 +10,7 @@
     flake = false;
   };
   # The python-starter commit this project was generated or last updated from: `copier update`
-  # moves it, so the pattern docs in vendor/ always match the template the code came from.
+  # moves it, so the pattern docs in scions/ always match the template the code came from.
   inputs.python-starter = {
     url = "github:danielnaab/python-starter/{{ _copier_conf.vcs_ref_hash }}";
     flake = false;
