@@ -1,3 +1,4 @@
+{%- if graft_docs %}{% set ps = "../vendor/python-starter" %}{% set mkb = "../vendor/meta-knowledge-base" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-starter/blob/" ~ _copier_conf.vcs_ref_hash %}{% set mkb = "https://github.com/danielnaab/meta-knowledge-base/blob/v1.0.0" %}{%- endif %}
 ---
 title: {{ project_name }} - Agent Entrypoint
 status: working
@@ -9,9 +10,8 @@ You are working on **{{ project_name }}**: {{ project_description }}
 
 ## Before Making Changes
 
-1. **Read project configuration**: [../knowledge-base.yaml](../knowledge-base.yaml)
-2. **Follow meta-KB policies**: [../.graft/meta-knowledge-base/AGENTS.md](../.graft/meta-knowledge-base/AGENTS.md)
-3. **Understand template patterns**: [../python-starter/docs/agents.md](../python-starter/docs/agents.md)
+1. **Follow meta-KB policies**: [meta-knowledge-base]({{ mkb }}/README.md)
+2. **Understand template patterns**: [architecture]({{ ps }}/docs/architecture/architecture.md)
 
 ## Core Pattern
 
@@ -51,13 +51,14 @@ When code and docs conflict, **code is correct**.
 
 ## Template Resources
 
-- [Architecture](../python-starter/docs/architecture/architecture.md) — patterns and design
-- [Decisions](../python-starter/docs/decisions/) — ADRs for tool and pattern choices
-- [Guides](../python-starter/docs/guides/) — getting started and development
-- [Agent reference](../python-starter/docs/agents.md) — template agent entrypoint
+- [Architecture]({{ ps }}/docs/architecture/architecture.md) — patterns and design
+- [Decisions]({{ ps }}/docs/decisions/001-why-uv.md) — ADRs for tool and pattern choices
+- [Getting started]({{ ps }}/docs/guides/getting-started.md) and [development]({{ ps }}/docs/guides/development.md)
+- [Reference]({{ ps }}/docs/reference/project-reference.md) — structure, config, tooling
+{% if graft_docs %}
+These are pinned copies in `vendor/` (see `vendor/README.md`); never edit them.
+{% endif %}
 
 ## Sources
 
-- [Project KB](../knowledge-base.yaml) — project configuration
-- [Template KB](../python-starter/docs/knowledge-base.yaml) — template configuration
-- [Meta KB](../.graft/meta-knowledge-base/AGENTS.md) — KB methodology
+- [Meta KB]({{ mkb }}/README.md) — KB methodology

@@ -1,3 +1,4 @@
+{%- if graft_docs %}{% set ps = "vendor/python-starter" %}{% set mkb = "vendor/meta-knowledge-base" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-starter/blob/" ~ _copier_conf.vcs_ref_hash %}{% set mkb = "https://github.com/danielnaab/meta-knowledge-base/blob/v1.0.0" %}{%- endif %}
 # Template Status - {{ project_name }}
 
 This project was generated from the **Python Starter Template**.
@@ -37,12 +38,12 @@ Copier will:
 
 ## Template Documentation
 
-All template patterns and guides are available in `../python-starter/docs/`:
+All template patterns and guides are available{% if graft_docs %} in `vendor/python-starter/docs/`, pinned to this project's template commit{% else %} on GitHub, at this project's template commit{% endif %}:
 
-- [Architecture Patterns](../python-starter/docs/architecture/)
-- [Architectural Decisions](../python-starter/docs/decisions/)
-- [Development Guides](../python-starter/docs/guides/)
-- [Technical Reference](../python-starter/docs/reference/)
+- [Architecture Patterns]({{ ps }}/docs/architecture/architecture.md)
+- [Architectural Decisions]({{ ps }}/docs/decisions/001-why-uv.md)
+- [Development Guides]({{ ps }}/docs/guides/development.md)
+- [Technical Reference]({{ ps }}/docs/reference/project-reference.md)
 
 ## Project Structure
 
@@ -53,7 +54,7 @@ This project uses the Python Starter Template architecture:
 - **Context objects**: Immutable dependency containers
 - **Testing with fakes**: Prefer fakes over mocks
 
-See [Template Architecture Overview](../python-starter/docs/architecture/architecture.md) for details.
+See [Template Architecture Overview]({{ ps }}/docs/architecture/architecture.md) for details.
 
 ## Customization
 
@@ -72,7 +73,7 @@ All other files may be updated when you run `copier update`.
 
 ## Need Help?
 
-- **Template documentation**: `../python-starter/docs/`
+- **Template documentation**: {% if graft_docs %}`vendor/python-starter/docs/`{% else %}[python-starter docs]({{ ps }}/docs/architecture/architecture.md){% endif %}
 - **Agent guidance**: `docs/agents.md`
 - **Project documentation**: `docs/README.md`
 
