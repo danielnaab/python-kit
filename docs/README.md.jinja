@@ -1,3 +1,4 @@
+{%- if graft_docs %}{% set ps = "../vendor/python-starter" %}{% set mkb = "../vendor/meta-knowledge-base" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-starter/blob/" ~ _copier_conf.vcs_ref_hash %}{% set mkb = "https://github.com/danielnaab/meta-knowledge-base/blob/v1.0.0" %}{%- endif %}
 ---
 title: {{ project_name }} Documentation
 status: working
@@ -27,17 +28,16 @@ src/{{ package_name }}/
 
 ## Architecture & Patterns
 
-This project uses the [Python Starter Template](../python-starter) patterns:
+This project uses the [Python Starter Template](https://github.com/danielnaab/python-starter) patterns:
 
-- [Architecture](../python-starter/docs/architecture/architecture.md) — layers, functional services, protocol DI
-- [Decisions](../python-starter/docs/decisions/) — ADRs for tooling and pattern choices
-- [Getting Started](../python-starter/docs/guides/getting-started.md) | [Development Guide](../python-starter/docs/guides/development.md)
-- [Reference](../python-starter/docs/reference/project-reference.md) — structure, config, tooling
+- [Architecture]({{ ps }}/docs/architecture/architecture.md) — layers, functional services, protocol DI
+- [Decisions]({{ ps }}/docs/decisions/001-why-uv.md) — ADRs for tooling and pattern choices
+- [Getting Started]({{ ps }}/docs/guides/getting-started.md) | [Development Guide]({{ ps }}/docs/guides/development.md)
+- [Reference]({{ ps }}/docs/reference/project-reference.md) — structure, config, tooling
 
 ## Project-Specific
 
 - [Agent Entrypoint](agents.md) — for AI agents working on this project
-- [Knowledge Base](../knowledge-base.yaml) — project KB configuration
 
 ## Template
 
@@ -46,5 +46,4 @@ This project uses the [Python Starter Template](../python-starter) patterns:
 
 ## Sources
 
-- [Template Documentation](../python-starter/docs/)
-- [Knowledge Base Config](../knowledge-base.yaml)
+- [Template Documentation]({{ ps }}/docs/architecture/architecture.md)

@@ -28,6 +28,7 @@ _exclude:
   - dist
   - build
   - .DS_Store
+  - .gitattributes  # python-starter's own export rules
   # Template documentation stays in template, not generated in projects
   - docs/copier
   - docs/architecture
@@ -112,6 +113,13 @@ include_github_actions:
 include_dev_scripts:
   type: bool
   help: Include development scripts (setup.sh, test.sh)?
+  default: true
+
+graft_docs:
+  type: bool
+  help: >-
+    Graft pinned copies of python-starter's pattern docs and meta-knowledge-base into vendor/?
+    Needs Nix. Without it, docs link to GitHub at this template's commit instead.
   default: true
 
 license:

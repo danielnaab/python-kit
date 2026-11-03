@@ -6,10 +6,8 @@ entrypoints:
   human: docs/README.md
   agent: docs/agents.md
 
-imports:
-  - path: .graft/meta-knowledge-base
-    relationship: foundational
-    sync_policy: "pin to graft.lock version; update via graft pull"
+# Follows meta-knowledge-base (https://github.com/danielnaab/meta-knowledge-base). Projects generated
+# from this template graft it, and this template's pattern docs, into vendor/ (copier.yml graft_docs).
 
 paths:
   architecture: docs/architecture/

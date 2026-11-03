@@ -15,9 +15,13 @@ Traditional templates copy all docs into generated projects, creating duplicatio
 ## Solution
 
 1. Template docs stay in the template (single source of truth)
-2. Generated projects **link** to template docs via relative paths
-3. Knowledge base imports make docs discoverable to agents
-4. `copier update` pushes improvements downstream
+2. Generated projects **graft** them: a pinned copy of this template's export (`.gitattributes`:
+   the pattern docs and the sources they cite) in `vendor/python-starter/`, at the commit the
+   project was generated from (`_copier_conf.vcs_ref_hash`, in the rendered `flake.nix`)
+3. Generated docs link into `vendor/`, so links resolve at the version the code came from
+4. `copier update` moves the pin with the code; `nix run .#graft` refreshes `vendor/`
+
+With `graft_docs: false`, the same links point at GitHub at that commit instead.
 
 ## File Categories
 
@@ -32,14 +36,12 @@ Traditional templates copy all docs into generated projects, creating duplicatio
 
 ## Agent Discovery Flow
 
-1. Agent reads project `knowledge-base.yaml`
-2. Follows import to `../python-starter/knowledge-base.yaml`
-3. Discovers template docs (architecture, decisions, guides)
-4. Applies patterns to project-specific code
+1. Agent reads the project's `docs/agents.md`
+2. Follows its links into `vendor/python-starter/docs/` (architecture, decisions, guides)
+3. Applies patterns to project-specific code
 
 ## When Not to Use
 
-- Projects deployed without template access
 - Template is unstable with frequent breaking changes
 - Projects that significantly fork the patterns
 
