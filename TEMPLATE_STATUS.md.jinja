@@ -51,6 +51,9 @@ All template patterns and guides are available{% if graft_docs %} in `scions/pyt
 - `.forgejo/workflows/graft-check.yaml` checks on every PR that `scions/` matches `flake.lock`.
 - `.forgejo/workflows/graft-upgrade.yaml` runs weekly: if meta-knowledge-base has a newer tag, it
   opens a PR moving to it. python-starter's own pin follows `copier update`, not this bot.
+  On a private repo Forgejo won't let the job token open a PR: add a repo Actions secret
+  `GRAFT_PR_TOKEN` holding a token with `write:repository` scope (the steward user's, so you
+  review the bot's PRs). Without it the run pushes `graft/upgrade` and fails with a compare link.
 - By hand: `nix run .#graft-outdated`, `nix run .#graft-upgrade`.
 {% endif %}
 ## Project Structure
