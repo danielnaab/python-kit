@@ -1,4 +1,4 @@
-{%- if graft_docs %}{% set ps = "vendor/python-starter" %}{% set mkb = "vendor/meta-knowledge-base" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-starter/blob/" ~ _copier_conf.vcs_ref_hash %}{% set mkb = "https://github.com/danielnaab/meta-knowledge-base/blob/v1.0.0" %}{%- endif %}
+{%- if graft_docs %}{% set ps = "scions/python-starter" %}{% set mkb = "scions/meta-knowledge-base" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-starter/blob/" ~ _copier_conf.vcs_ref_hash %}{% set mkb = "https://github.com/danielnaab/meta-knowledge-base/blob/v1.0.0" %}{%- endif %}
 # Template Status - {{ project_name }}
 
 This project was generated from the **Python Starter Template**.
@@ -38,7 +38,7 @@ Copier will:
 
 ## Template Documentation
 
-All template patterns and guides are available{% if graft_docs %} in `vendor/python-starter/docs/`, pinned to this project's template commit{% else %} on GitHub, at this project's template commit{% endif %}:
+All template patterns and guides are available{% if graft_docs %} in `scions/python-starter/docs/`, pinned to this project's template commit{% else %} on GitHub, at this project's template commit{% endif %}:
 
 - [Architecture Patterns]({{ ps }}/docs/architecture/architecture.md)
 - [Architectural Decisions]({{ ps }}/docs/decisions/001-why-uv.md)
@@ -73,7 +73,7 @@ All other files may be updated when you run `copier update`.
 
 ## Need Help?
 
-- **Template documentation**: {% if graft_docs %}`vendor/python-starter/docs/`{% else %}[python-starter docs]({{ ps }}/docs/architecture/architecture.md){% endif %}
+- **Template documentation**: {% if graft_docs %}`scions/python-starter/docs/`{% else %}[python-starter docs]({{ ps }}/docs/architecture/architecture.md){% endif %}
 - **Agent guidance**: `docs/agents.md`
 - **Project documentation**: `docs/README.md`
 
