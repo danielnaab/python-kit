@@ -45,6 +45,14 @@ All template patterns and guides are available{% if graft_docs %} in `scions/pyt
 - [Development Guides]({{ ps }}/docs/guides/development.md)
 - [Technical Reference]({{ ps }}/docs/reference/project-reference.md)
 
+{% if graft_docs %}
+### Keeping the grafted docs current
+
+- `.forgejo/workflows/graft-check.yaml` checks on every PR that `scions/` matches `flake.lock`.
+- `.forgejo/workflows/graft-upgrade.yaml` runs weekly: if meta-knowledge-base has a newer tag, it
+  opens a PR moving to it. python-starter's own pin follows `copier update`, not this bot.
+- By hand: `nix run .#graft-outdated`, `nix run .#graft-upgrade`.
+{% endif %}
 ## Project Structure
 
 This project uses the Python Starter Template architecture:
