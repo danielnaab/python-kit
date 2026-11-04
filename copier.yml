@@ -29,6 +29,7 @@ _exclude:
   - build
   - .DS_Store
   - .gitattributes  # python-starter's own export rules
+  - CHANGELOG.md  # python-starter's releases, not the project's
   # Template documentation stays in template, not generated in projects
   - docs/copier
   - docs/architecture

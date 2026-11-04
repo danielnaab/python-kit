@@ -1,5 +1,6 @@
 # What python-starter exports to projects that graft it (https://github.com/danielnaab/graft/tree/v2):
-# the pattern docs generated projects link to, and the template sources those docs cite as evidence.
+# the pattern docs generated projects link to, the template sources those docs cite as evidence,
+# and CHANGELOG.md.
 # The rest (READMEs, scripts, CI, the template's own agent docs and KB config) is the template's own.
 *                     export-ignore
 /docs                 -export-ignore
@@ -17,3 +18,4 @@
 /tests/**             -export-ignore
 /copier.yml           -export-ignore
 /pyproject.toml.jinja -export-ignore
+/CHANGELOG.md         -export-ignore
