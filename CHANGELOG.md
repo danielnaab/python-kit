@@ -20,6 +20,11 @@ Generated projects with `graft_docs` pin python-starter to the commit they came 
 - Template: `TEMPLATE_STATUS.md`'s "Before updating" step links this file instead of "the
   changelog (if available)".
 
+### Fixed
+- Template: with `graft_docs`, generating a project runs `nix run .#graft` before the first
+  commit. That commit used to have no `scions/`, so its README and docs links were broken; a
+  link-checking commit hook rejected it, and Copier then deleted the new project.
+
 ## v1.3.0 - 2026-11-04
 
 ### Changed

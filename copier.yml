@@ -163,6 +163,15 @@ _tasks:
   - command: git add .
     when: "{{ _copier_operation == 'copy' }}"
 
+  # Graft the docs before the first commit: README.md and docs/ link into scions/, so a commit
+  # without it has broken links (and a link-checking commit hook rejects it, which makes Copier
+  # delete the new project). The flake needs its files tracked first, hence after `git add`.
+  - command: nix run .#graft
+    when: "{{ _copier_operation == 'copy' and graft_docs }}"
+
+  - command: git add .
+    when: "{{ _copier_operation == 'copy' and graft_docs }}"
+
   - command: 'git commit -m "Initial commit from Python Starter Template"'
     when: "{{ _copier_operation == 'copy' }}"
 
