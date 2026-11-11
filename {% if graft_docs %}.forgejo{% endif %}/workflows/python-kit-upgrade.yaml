@@ -125,7 +125,7 @@ jobs:
             [ -z "$conflicts" ] && [ ! -s "$report" ]
         run: |
           nix shell "$NIXPKGS#copier" "$NIXPKGS#uv" "$NIXPKGS#python3" "$NIXPKGS#coreutils" "$NIXPKGS#gnugrep" \
-            "$NIXPKGS#gnused" --command bash -euo pipefail -c "$SCRIPT"
+            "$NIXPKGS#gnused" "$NIXPKGS#gawk" --command bash -euo pipefail -c "$SCRIPT"
 
   # Open the PR (or retitle the open one, which the push updated), saying what python-kit changed and whether
   # the update merged cleanly and passed its checks. A fresh job, checked out at the default branch: it reads
