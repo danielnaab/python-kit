@@ -10,6 +10,49 @@ python-kit (formerly python-starter) is two things, and each entry says which on
 Generated projects with `graft_docs` pin python-kit to the commit they came from, so
 `copier update`, not graft's weekly PR, moves them between these versions.
 
+## v2.2.0 - 2026-11-11
+
+### Template
+
+- `flake.nix` is the project's: it is in `_skip_if_exists`, so `copier update` no longer rewrites it (an update
+  that moved the python-kit pin conflicted in every project whose `flake.nix` had changed, as graft-upgrade
+  changes it). python-kit-upgrade moves the python-kit input, and nothing else in the file, to the commit of
+  the tag it updated to (a `url = "github:danielnaab/python-kit/..."` line, whatever its layout; the run fails
+  if there isn't exactly one), then runs `nix run .#graft` as before. graft-upgrade still moves graft and the
+  other pins. The PR job is unchanged: it runs none of the branch's code.
+- `docs/agents.md` is generated once: `_exclude` lists it during an update (`_copier_operation == 'update'`)
+  instead of `_skip_if_exists`, so an update neither changes it nor recreates it after you delete it.
+- `_min_copier_version` is 9.6.0, the first copier with `_copier_operation` in `_exclude` and `_tasks` (the
+  `_tasks` that only run on `copy` already relied on it).
+- With `include_example_code: false`, the example code is not generated at all. Before, its files rendered as
+  docstring-only stubs (`domain/entity.py`, `errors.py`, `repository.py`, `adapters/in_memory_repository.py`,
+  `services/example_service.py`, `cli/commands/example.py`, `tests/conftest.py`, `tests/fakes/fake_repository.py`,
+  `tests/unit/test_entity.py`, `test_example_service.py`, `tests/integration/test_in_memory_repository.py`), and
+  being in `_skip_if_exists`, which only protects files that exist, every `copier update` recreated the ones a
+  project had deleted, as did the weekly python-kit-upgrade PR. `copier.yml` `_exclude` now lists them under
+  `{% if not include_example_code %}`, and the example entries of `_skip_if_exists` (including `tests/unit/*.py`
+  and `tests/integration/*.py`) apply only with example code, so without it an update respects deleted files
+  such as `tests/unit/__init__.py`. Nothing imported the stubs: the `__init__.py` exports, `services/context.py`
+  and `cli/main.py` are unchanged and keep their skeleton comments.
+- `TEMPLATE_STATUS.md` lists the example files as protected only with example code, and says what happens
+  without it.
+
+### Exported docs
+
+- The example templates in `src/` and `tests/` lose their `{% else %}` stub branches.
+
+### Migration
+
+`copier update --trust --vcs-ref v2.2.0` (copier 9.6.0 or later). The update leaves `flake.nix` alone, and
+its v2.2.0 migration moves the python-kit pin to v2.2.0's commit (the python-kit-upgrade workflow running this
+update is still v2.1.0's, which doesn't); if it finds no single python-kit `url` line it stops and says so,
+and you set the pin by hand. Then `nix run .#graft`, `nix flake check`, and commit `flake.nix`, `flake.lock`,
+`scions/` and `.forgejo/workflows/python-kit-upgrade.yaml`. The weekly PR does this too, except that it
+changes a workflow, so it is pushed for you to open.
+
+Nothing is deleted: stub example files a project without example code still has stay, and are yours to
+delete; an update won't bring them back, or `docs/agents.md`.
+
 ## v2.1.0 - 2026-11-11
 
 ### Template

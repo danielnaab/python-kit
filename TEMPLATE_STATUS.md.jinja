@@ -38,13 +38,16 @@ Copier will:
 - Show conflicts for manual resolution
 - Run the template's migrations for the versions it crosses (`_migrations` in python-kit's `copier.yml`)
 {% if graft_docs %}
-Then `nix run .#graft`: the update moves `flake.nix`'s python-kit pin, and graft re-locks it and rebuilds
-`scions/`. Commit `flake.lock` and `scions/` with the update.
+`flake.nix` is this project's: the update doesn't touch it. Move its python-kit input to the commit of the
+tag you updated to (`git ls-remote https://github.com/danielnaab/python-kit 'refs/tags/vX.Y.Z^{}'`), then
+`nix run .#graft`, which re-locks it and rebuilds `scions/`. Commit `flake.nix`, `flake.lock` and `scions/`
+with the update. The weekly PR below does all of this.
 
 ### The weekly update PR
 
 `.forgejo/workflows/python-kit-upgrade.yaml` runs weekly (Mondays 06:41 UTC): if python-kit has a newer
-tag in the major this project is on, it runs `copier update` to it, `nix run .#graft`, `nix flake check` and
+tag in the major this project is on, it runs `copier update` to it, moves `flake.nix`'s python-kit pin (and
+nothing else in it) to that tag's commit, then `nix run .#graft`, `nix flake check` and
 the tests, pushes the result to `python-kit/upgrade` and opens a PR quoting python-kit's CHANGELOG. Conflicts
 and failing checks are pushed too, and named in the PR's title. A new major is never taken: the run warns,
 and you update by hand after reading its Migration section. It opens the PR with the same
@@ -67,8 +70,8 @@ All template patterns and guides are available{% if graft_docs %} in `scions/pyt
 - `.forgejo/workflows/graft-upgrade.yaml` runs weekly: if graft or knowledge-base-kit has a newer
   tag in its major, it opens a PR moving to it, gated by the whole `nix flake check` and quoting
   the provider's CHANGELOG. Both workflows carry `# managed by graft` and move with graft's pin;
-  delete that line to keep your own edits. python-kit's own pin follows `copier update` (the
-  python-kit-upgrade PR above), not this bot.
+  delete that line to keep your own edits. python-kit's own pin moves with the
+  python-kit-upgrade PR above, not this bot.
   On a private repo Forgejo won't let the job token open a PR, so the bot uses the Actions secret
   `GRAFT_PR_TOKEN`: a `write:repository` token for a bot user (steward), so you review its PRs.
   A user-level secret (your Settings > Actions > Secrets) covers every repo you own; a repo-level
@@ -89,19 +92,27 @@ See [Template Architecture Overview]({{ ps }}/docs/architecture/architecture.md)
 ## Customization
 
 Files protected from updates (you can modify freely):
-- `src/{{ package_name }}/domain/entity.py`
+{% if include_example_code %}- `src/{{ package_name }}/domain/entity.py`
 - `src/{{ package_name }}/services/example_service.py`
 - `src/{{ package_name }}/adapters/in_memory_repository.py`
 - `src/{{ package_name }}/cli/commands/example.py`
 - `tests/unit/*.py`
 - `tests/integration/*.py`
-- `README.md`
-- `docs/agents.md`
+{% endif %}- `README.md`
 - `knowledge-base.yaml`
 {% if graft_docs %}- `.forgejo/workflows/graft-check.yaml`, `.forgejo/workflows/graft-upgrade.yaml` (graft-upgrade moves them)
+- `flake.nix` (graft-upgrade moves graft's pins, python-kit-upgrade the python-kit one)
 {% endif %}
-All other files may be updated when you run `copier update`.
+`docs/agents.md` is generated once: `copier update` never changes it, and doesn't bring it back if you delete it.
 
+All other files may be updated when you run `copier update`.
+{% if not include_example_code %}
+Without example code (`include_example_code: false`), the template generates no example modules or tests
+(`domain/entity.py`, `errors.py`, `repository.py`, `adapters/in_memory_repository.py`,
+`services/example_service.py`, `cli/commands/example.py`, `tests/conftest.py`, `tests/fakes/fake_repository.py`
+and the example tests), and nothing under `src/` or `tests/` is protected, so `copier update` merges into the
+files it generates and respects the ones you delete: it never adds them back.
+{% endif %}
 ## Need Help?
 
 - **Template documentation**: {% if graft_docs %}`scions/python-kit/docs/`{% else %}[python-kit docs]({{ ps }}/docs/architecture/architecture.md){% endif %}

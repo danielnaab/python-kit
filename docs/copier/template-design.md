@@ -39,7 +39,11 @@ This repository is a [Copier](https://copier.readthedocs.io/) template. Users ru
 
 ## Conditional Content
 
-Files use `{% if include_example_code %}` to include or omit working examples. When disabled, files contain skeleton code with comments explaining the pattern.
+Files use `{% if include_example_code %}` to include or omit working examples. When disabled, the shared
+files (`__init__.py` exports, `services/context.py`, `cli/main.py`) keep only a skeleton with comments
+explaining the pattern, and the example-only modules and tests are not generated at all: `copier.yml` `_exclude`
+lists them under `{% if not include_example_code %}` (as docstring-only stubs, every `copier update`
+recreated them in a project that had deleted them).
 
 Conditional features:
 - `include_github_actions` — `.github/workflows/` lint and test workflows
@@ -67,7 +71,13 @@ the update itself can't do, such as renaming paths in the files it skips. Each r
 "Migration" section says what is left to do by hand. With `graft_docs`, the generated
 `python-kit-upgrade` workflow runs the update weekly and opens a PR.
 
-Protected files (`_skip_if_exists`): domain/entity.py, example_service.py, in_memory_repository.py, CLI commands, unit/integration tests, README.md, docs/agents.md, knowledge-base.yaml, and graft's two workflows (graft-upgrade moves them)
+Protected files (`_skip_if_exists`, generated when missing, never overwritten): with example code,
+domain/entity.py, example_service.py, in_memory_repository.py, CLI commands and unit/integration tests; always
+README.md, knowledge-base.yaml, and with `graft_docs` graft's two workflows (graft-upgrade moves them) and
+`flake.nix`. The project owns `flake.nix`: graft-upgrade moves graft's pins, and python-kit-upgrade moves the
+python-kit pin to the tag it updated to (the v2.2.0 migration does it once, for the update that introduced
+this). `docs/agents.md` is generated once: `_exclude` lists it when `_copier_operation == 'update'` (copier
+9.6.0+), so an update neither changes it nor recreates it after deletion.
 
 ## Sources
 
