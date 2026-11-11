@@ -73,11 +73,12 @@ the update itself can't do, such as renaming paths in the files it skips. Each r
 
 Protected files (`_skip_if_exists`, generated when missing, never overwritten): with example code,
 domain/entity.py, example_service.py, in_memory_repository.py, CLI commands and unit/integration tests; always
-README.md, knowledge-base.yaml, and with `graft_docs` graft's two workflows (graft-upgrade moves them) and
+README.md, docs/agents.md, knowledge-base.yaml, and with `graft_docs` graft's two workflows (graft-upgrade moves them) and
 `flake.nix`. The project owns `flake.nix`: graft-upgrade moves graft's pins, and python-kit-upgrade moves the
 python-kit pin to the tag it updated to (the v2.2.0 migration does it once, for the update that introduced
-this). `docs/agents.md` is generated once: `_exclude` lists it when `_copier_operation == 'update'` (copier
-9.6.0+), so an update neither changes it nor recreates it after deletion.
+this). `docs/agents.md` is generated once: `_exclude` also lists it when `_copier_operation == 'update'`, so an
+update neither changes it nor recreates it after deletion (copier 9.10.3+, the first to apply the new
+`_exclude` to the old render: older ones delete a newly excluded file).
 
 ## Sources
 

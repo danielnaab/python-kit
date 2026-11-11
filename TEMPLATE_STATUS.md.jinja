@@ -103,7 +103,7 @@ Files protected from updates (you can modify freely):
 {% if graft_docs %}- `.forgejo/workflows/graft-check.yaml`, `.forgejo/workflows/graft-upgrade.yaml` (graft-upgrade moves them)
 - `flake.nix` (graft-upgrade moves graft's pins, python-kit-upgrade the python-kit one)
 {% endif %}
-`docs/agents.md` is generated once: `copier update` never changes it, and doesn't bring it back if you delete it.
+`docs/agents.md` is generated once: `copier update` and `copier recopy` never change it, and an update doesn't bring it back if you delete it.
 
 All other files may be updated when you run `copier update`.
 {% if not include_example_code %}

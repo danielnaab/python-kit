@@ -82,7 +82,7 @@ jobs:
               refs=$(git ls-remote "$src" "refs/tags/$target" "refs/tags/$target^{}")
               sha=$(awk -v t="refs/tags/$target" '$2 == t "^{}" { p = $1 } $2 == t { l = $1 } END { print (p ? p : l) }' <<<"$refs")
               [[ $sha =~ ^[0-9a-f]{40}$ ]] || { echo "::error::can't resolve python-kit $target to a commit at $src"; exit 1; }
-              pin='^([^#]*[^[:alnum:]_]url[[:space:]]*=[[:space:]]*"github:danielnaab/python-kit/)[^"]*"'
+              pin='^([^#]*(^|[^[:alnum:]_])url[[:space:]]*=[[:space:]]*"github:danielnaab/python-kit/)[^"]*"'
               n=$(grep -cE "$pin" flake.nix || true)
               [ "$n" = 1 ] || { echo "::error::flake.nix has $n lines like url = \"github:danielnaab/python-kit/...\", not one: set the python-kit input to $sha by hand"; exit 1; }
               sed -i -E "s#$pin#\1$sha\"#" flake.nix
@@ -111,7 +111,9 @@ jobs:
               fi
             fi
             export UV_PYTHON_DOWNLOADS=never UV_PYTHON=python3
-            check "uv run pytest" uv run pytest
+            # Exit 5 is "no tests ran": a project without example code may have none yet.
+            pytest_() { local rc=0; uv run pytest "$@" || rc=$?; [ "$rc" = 0 ] || [ "$rc" = 5 ]; }
+            check "uv run pytest" pytest_
 
             git add -A
             message=(-m "python-kit: $cur -> $target")

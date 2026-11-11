@@ -1,7 +1,8 @@
 # Copier template configuration for python-kit
 # This file defines template variables and generation settings
 
-_min_copier_version: "9.6.0"  # `_copier_operation` in _exclude and _tasks (9.6.0); migrations in the command/when form (9.3.0)
+_min_copier_version: "9.10.3"  # an update applies the new _exclude to the old render too (9.10.3; before, a file
+# newly excluded, such as docs/agents.md, looked removed and was deleted); `_copier_operation` (9.6.0)
 
 # Answers file configuration
 _answers_file: .copier-answers.yml
@@ -40,7 +41,8 @@ _exclude:
   - "{% if not include_github_actions %}.github{% endif %}"
   - "{% if not include_dev_scripts %}scripts{% endif %}"
   # Generated once: an update neither changes docs/agents.md nor brings it back once deleted (with
-  # _skip_if_exists, it came back on every update).
+  # _skip_if_exists alone, it came back on every update). It is in _skip_if_exists too, for recopy,
+  # which runs as a copy.
   - "{% if _copier_operation == 'update' %}docs/agents.md{% endif %}"
   # The example code and its tests, only with include_example_code (they once rendered as docstring-only
   # stubs, which every `copier update` recreated in a project that had deleted them)
@@ -67,6 +69,7 @@ _skip_if_exists:
   - "{% if include_example_code %}tests/unit/*.py{% endif %}"
   - "{% if include_example_code %}tests/integration/*.py{% endif %}"
   - README.md  # Users will customize
+  - docs/agents.md  # Project-specific agent entrypoint (and _exclude on update, above)
   - knowledge-base.yaml  # Project-specific KB config
   # graft's workflows: generated once, then graft-upgrade alone moves them with graft's pin (their
   # `# managed by graft` line), so a python-kit update never conflicts with or reverts them.
