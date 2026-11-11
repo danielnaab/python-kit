@@ -44,6 +44,8 @@ Files use `{% if include_example_code %}` to include or omit working examples. W
 Conditional features:
 - `include_github_actions` — `.github/workflows/` lint and test workflows
 - `include_dev_scripts` — `scripts/setup.sh` and `scripts/test.sh`
+- `graft_docs` — `flake.nix` (grafts python-kit's docs and knowledge-base-kit into `scions/`) and the Forgejo
+  workflows: graft's `graft-check` and `graft-upgrade`, and python-kit's own `python-kit-upgrade`
 
 ## Post-Generation
 
@@ -59,6 +61,11 @@ Generated projects can pull template updates:
 ```bash
 copier update
 ```
+
+`copier update` runs the `_migrations` in `copier.yml` for each version it crosses: commands for what
+the update itself can't do, such as renaming paths in the files it skips. Each release's CHANGELOG
+"Migration" section says what is left to do by hand. With `graft_docs`, the generated
+`python-kit-upgrade` workflow runs the update weekly and opens a PR.
 
 Protected files (`_skip_if_exists`): domain/entity.py, example_service.py, in_memory_repository.py, CLI commands, unit/integration tests, README.md, docs/agents.md, knowledge-base.yaml
 
