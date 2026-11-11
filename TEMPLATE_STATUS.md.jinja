@@ -98,7 +98,8 @@ Files protected from updates (you can modify freely):
 - `README.md`
 - `docs/agents.md`
 - `knowledge-base.yaml`
-
+{% if graft_docs %}- `.forgejo/workflows/graft-check.yaml`, `.forgejo/workflows/graft-upgrade.yaml` (graft-upgrade moves them)
+{% endif %}
 All other files may be updated when you run `copier update`.
 
 ## Need Help?

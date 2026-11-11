@@ -51,6 +51,10 @@ _skip_if_exists:
   - README.md  # Users will customize
   - docs/agents.md  # Project-specific agent entrypoint
   - knowledge-base.yaml  # Project-specific KB config
+  # graft's workflows: generated once, then graft-upgrade alone moves them with graft's pin (their
+  # `# managed by graft` line), so a python-kit update never conflicts with or reverts them.
+  - .forgejo/workflows/graft-check.yaml
+  - .forgejo/workflows/graft-upgrade.yaml
 
 # Template questions (user prompts)
 
@@ -195,7 +199,7 @@ _migrations:
       out = subprocess.run(["git", "ls-files", "-z"], capture_output=True, check=True).stdout
       for name in out.decode().split("\0"):
           path = pathlib.Path(name)
-          if not name or name.startswith("scions/") or path.name == "CHANGELOG.md" or not path.is_file():
+          if not name or name.startswith("scions/") or path.name == "CHANGELOG.md" or path.is_symlink() or not path.is_file():
               continue
           try:
               text = path.read_text(encoding="utf-8")
@@ -234,7 +238,7 @@ _migrations:
       }
       for name, pairs in fixes.items():
           path = pathlib.Path(name)
-          if not path.is_file():
+          if path.is_symlink() or not path.is_file():
               continue
           text = path.read_text(encoding="utf-8")
           new = text

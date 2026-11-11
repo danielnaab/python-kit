@@ -154,7 +154,7 @@ jobs:
             compare="$WEB/compare/$BASE...$BRANCH"
             # Opening a PR runs the repo's pull_request workflows from the PR's head, with its secrets: a branch
             # that changes them is left for you to review and open.
-            workflows=$(git diff --no-renames --name-only HEAD "$head" -- .forgejo .github | tr '\n' ' ')
+            workflows=$(git diff --no-renames --name-only HEAD..."$head" -- .forgejo .github | tr '\n' ' ')
             if [ -n "$workflows" ]; then
               echo "::error::this update changes CI workflows: $workflows. A PR would run them with the repo's secrets before anyone reads them, so none is opened: review the diff at $compare, then open the PR yourself."
               exit 1

@@ -67,7 +67,7 @@ the update itself can't do, such as renaming paths in the files it skips. Each r
 "Migration" section says what is left to do by hand. With `graft_docs`, the generated
 `python-kit-upgrade` workflow runs the update weekly and opens a PR.
 
-Protected files (`_skip_if_exists`): domain/entity.py, example_service.py, in_memory_repository.py, CLI commands, unit/integration tests, README.md, docs/agents.md, knowledge-base.yaml
+Protected files (`_skip_if_exists`): domain/entity.py, example_service.py, in_memory_repository.py, CLI commands, unit/integration tests, README.md, docs/agents.md, knowledge-base.yaml, and graft's two workflows (graft-upgrade moves them)
 
 ## Sources
 

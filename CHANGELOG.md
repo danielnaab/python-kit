@@ -29,6 +29,10 @@ Generated projects with `graft_docs` pin python-kit to the commit they came from
   `command`/`when` form.
 - `TEMPLATE_STATUS.md`: after `copier update`, `nix run .#graft`; and what the weekly update PR does.
   `docs/copier/template-design.md` (the template's own docs): `graft_docs`' files, migrations, the workflow.
+- graft's workflows (`.forgejo/workflows/graft-check.yaml`, `graft-upgrade.yaml`) are in `_skip_if_exists`:
+  a new project still gets them, and from then on graft-upgrade alone moves them with graft's pin, so a
+  python-kit update neither conflicts with nor reverts them (and its PR is refused only when
+  `python-kit-upgrade.yaml` itself changes).
 - The generated code is `ruff check` clean: `entity.id` for `getattr(entity, "id")` (B009), `T | None` for
   `Optional[T]` (UP045), and `raise typer.Exit(code=1) from e` in the example CLI commands (B904). `tests`
   imports are an isort block of their own (`known-local-folder`): a package named after "tests"
@@ -37,7 +41,8 @@ Generated projects with `graft_docs` pin python-kit to the commit they came from
 
 ### Exported docs
 
-- `docs/architecture/architecture.md`: the `Repository` protocol example uses `T | None`.
+- `docs/architecture/architecture.md` and `docs/decisions/003-protocol-di.md`: the `Repository` protocol
+  examples use `T | None`.
 
 ### Migration
 
