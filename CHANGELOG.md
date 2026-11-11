@@ -45,17 +45,17 @@ In a repo that grafts python-starter's docs (not generated from it): rename the 
 `python-kit = { url = "github:danielnaab/python-kit/v2.0.0"; flake = false; };`, `nix run .#graft`, and update
 links from `scions/python-starter/` to `scions/python-kit/`.
 
-## [Unreleased]
+### Also in this release (unreleased since v1.3.0)
 
-### Added
+#### Added
 - CHANGELOG.md, covering every tag from v1.0.0. It is exported (graft's scions get it) and
   excluded from generated projects (`copier.yml` `_exclude`).
 
-### Changed
+#### Changed
 - Template: `TEMPLATE_STATUS.md`'s "Before updating" step links this file instead of "the
   changelog (if available)".
 
-### Fixed
+#### Fixed
 - Template: with `graft_docs`, generating a project runs `nix run .#graft` before the first
   commit. That commit used to have no `scions/`, so its README and docs links were broken; a
   link-checking commit hook rejected it, and Copier then deleted the new project.
