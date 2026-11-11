@@ -42,6 +42,9 @@ graft's weekly PR doesn't.
   and `cli/main.py` are unchanged and keep their skeleton comments.
 - `TEMPLATE_STATUS.md` lists the example files as protected only with example code, and says what happens
   without it.
+- The generated `docs/README.md` drops its `**Version**: <commit>` line (`TEMPLATE_STATUS.md` and
+  `.copier-answers.yml` record the version): it changed with every release, so every update conflicted in a
+  project that had rewritten `docs/README.md` (copier 9.10.3 marks the conflict; later copier keeps your file).
 
 ### Exported docs
 
