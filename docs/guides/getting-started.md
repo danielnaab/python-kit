@@ -16,7 +16,7 @@ owners: [documentation-team]
 
 ```bash
 pip install copier
-copier copy path/to/python-starter my-project
+copier copy https://github.com/danielnaab/python-kit my-project
 cd my-project
 ```
 

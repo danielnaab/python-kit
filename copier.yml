@@ -1,4 +1,4 @@
-# Copier template configuration for Python Starter Template
+# Copier template configuration for python-kit
 # This file defines template variables and generation settings
 
 _min_copier_version: "9.0.0"
@@ -28,8 +28,8 @@ _exclude:
   - dist
   - build
   - .DS_Store
-  - .gitattributes  # python-starter's own export rules
-  - CHANGELOG.md  # python-starter's releases, not the project's
+  - .gitattributes  # python-kit's own export rules
+  - CHANGELOG.md  # python-kit's releases, not the project's
   # Template documentation stays in template, not generated in projects
   - docs/copier
   - docs/architecture
@@ -119,7 +119,7 @@ include_dev_scripts:
 graft_docs:
   type: bool
   help: >-
-    Graft pinned copies of python-starter's pattern docs and meta-knowledge-base into scions/?
+    Graft pinned copies of python-kit's pattern docs and knowledge-base-kit into scions/?
     Needs Nix. Without it, docs link to GitHub at this template's commit instead.
   default: true
 
@@ -172,7 +172,7 @@ _tasks:
   - command: git add .
     when: "{{ _copier_operation == 'copy' and graft_docs }}"
 
-  - command: 'git commit -m "Initial commit from Python Starter Template"'
+  - command: 'git commit -m "Initial commit from python-kit"'
     when: "{{ _copier_operation == 'copy' }}"
 
 # Migrations for template updates (version-aware)

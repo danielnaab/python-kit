@@ -1,14 +1,49 @@
 # Changelog
 
-python-starter is two things, and each entry says which one changed:
+python-kit (formerly python-starter) is two things, and each entry says which one changed:
 
 - **Template**: what `copier copy` / `copier update` puts in a generated project.
-- **Exported docs**: what a repo that grafts python-starter gets in `scions/python-starter/`
+- **Exported docs**: what a repo that grafts python-kit gets in `scions/python-kit/`
   (`.gitattributes`: `docs/architecture`, `docs/decisions`, `docs/guides`, `docs/reference`, the
   `src/` and `tests/` they cite, `copier.yml`, `pyproject.toml.jinja`, and this file).
 
-Generated projects with `graft_docs` pin python-starter to the commit they came from, so
+Generated projects with `graft_docs` pin python-kit to the commit they came from, so
 `copier update`, not graft's weekly PR, moves them between these versions.
+
+## v2.0.0 - 2026-11-11
+
+**Renamed:** python-starter is now **python-kit**: a kit you generate a project from and keep upgrading, with
+`copier update` for the structure and graft for the pattern docs, moving together. Old GitHub URLs redirect;
+the old Forgejo SSH URL does not.
+
+### Template
+
+- `.copier-answers.yml` records `_src_path: https://github.com/danielnaab/python-kit` whatever path the project
+  was generated from, so `copier update` works from any checkout (a `.graft/…` or `../` path only resolved where
+  it was first run).
+- With `graft_docs`: the flake grafts `python-kit` (was `python-starter`) and knowledge-base-kit v2.0.0 (was
+  meta-knowledge-base v1.0.1) into `scions/`, uses graft v2.9.0's `mkFlake` (was v2.4.1's `mkGraft` with `deps`),
+  and carries graft v2.9.0's two workflows. Links in README, TEMPLATE_STATUS and `docs/` follow the new paths.
+- The generated README's install step says `cd <your-project>` (it said `cd python-starter`).
+
+### Exported docs
+
+- The project's own name throughout; links to the conventions point at knowledge-base-kit v2.0.0.
+
+### Migration
+
+In a generated project:
+
+1. `.copier-answers.yml`: set `_src_path: https://github.com/danielnaab/python-kit` (by hand, this once).
+2. `copier update --vcs-ref v2.0.0` and resolve conflicts. With `graft_docs`, the update rewrites `flake.nix`;
+   then `nix run .#graft` (`scions/python-starter/` becomes `scions/python-kit/`, `scions/meta-knowledge-base/`
+   becomes `scions/knowledge-base-kit/`) and commit `flake.nix`, `flake.lock`, `scions/` and the workflows.
+3. Your own files that link into `scions/python-starter/` or `scions/meta-knowledge-base/` (the update doesn't
+   touch files it skips, such as README.md and docs/agents.md): change the paths.
+
+In a repo that grafts python-starter's docs (not generated from it): rename the input to
+`python-kit = { url = "github:danielnaab/python-kit/v2.0.0"; flake = false; };`, `nix run .#graft`, and update
+links from `scions/python-starter/` to `scions/python-kit/`.
 
 ## [Unreleased]
 

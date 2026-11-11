@@ -1,10 +1,10 @@
 ---
-title: Python Starter Template Documentation
+title: python-kit Documentation
 status: stable
 owners: [template-team]
 ---
 
-# Python Starter Template
+# python-kit
 
 Copier template for Python projects with functional service architecture, protocol-based DI, and modern tooling (uv, ruff, pytest, Typer).
 
@@ -12,7 +12,7 @@ Copier template for Python projects with functional service architecture, protoc
 
 ```bash
 pip install copier
-copier copy path/to/python-starter my-project
+copier copy https://github.com/danielnaab/python-kit my-project
 ```
 
 See [Getting Started](guides/getting-started.md) for details.

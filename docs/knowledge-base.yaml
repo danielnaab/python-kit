@@ -1,12 +1,12 @@
 apiVersion: kb/v1
-name: python-starter
+name: python-kit
 description: "Domain-agnostic Python starter template with functional service layer"
 
 entrypoints:
   human: docs/README.md
   agent: docs/agents.md
 
-# Follows meta-knowledge-base (https://github.com/danielnaab/meta-knowledge-base). Projects generated
+# Follows knowledge-base-kit (https://github.com/danielnaab/knowledge-base-kit). Projects generated
 # from this template graft it, and this template's pattern docs, into scions/ (copier.yml graft_docs).
 
 paths:

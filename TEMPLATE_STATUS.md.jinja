@@ -1,7 +1,7 @@
-{%- if graft_docs %}{% set ps = "scions/python-starter" %}{% set mkb = "scions/meta-knowledge-base" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-starter/blob/" ~ _copier_conf.vcs_ref_hash %}{% set mkb = "https://github.com/danielnaab/meta-knowledge-base/blob/v1.0.0" %}{%- endif %}
+{%- if graft_docs %}{% set ps = "scions/python-kit" %}{% set mkb = "scions/knowledge-base-kit" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-kit/blob/" ~ _copier_conf.vcs_ref_hash %}{% set mkb = "https://github.com/danielnaab/knowledge-base-kit/blob/v2.0.0" %}{%- endif %}
 # Template Status - {{ project_name }}
 
-This project was generated from the **Python Starter Template**.
+This project was generated from the **python-kit**.
 
 ## Generation Info
 
@@ -28,7 +28,7 @@ copier update --trust
 
 **Before updating**:
 1. Commit all local changes
-2. Review [python-starter's CHANGELOG](https://github.com/danielnaab/python-starter/blob/main/CHANGELOG.md)
+2. Review [python-kit's CHANGELOG](https://github.com/danielnaab/python-kit/blob/main/CHANGELOG.md)
    for the versions between this project's `_commit` (in `.copier-answers.yml`) and the new one
 3. Test after updating
 
@@ -39,7 +39,7 @@ Copier will:
 
 ## Template Documentation
 
-All template patterns and guides are available{% if graft_docs %} in `scions/python-starter/docs/`, pinned to this project's template commit{% else %} on GitHub, at this project's template commit{% endif %}:
+All template patterns and guides are available{% if graft_docs %} in `scions/python-kit/docs/`, pinned to this project's template commit{% else %} on GitHub, at this project's template commit{% endif %}:
 
 - [Architecture Patterns]({{ ps }}/docs/architecture/architecture.md)
 - [Architectural Decisions]({{ ps }}/docs/decisions/001-why-uv.md)
@@ -50,10 +50,10 @@ All template patterns and guides are available{% if graft_docs %} in `scions/pyt
 ### Keeping the grafted docs current
 
 - `.forgejo/workflows/graft-check.yaml` checks on every PR that `scions/` matches `flake.lock`.
-- `.forgejo/workflows/graft-upgrade.yaml` runs weekly: if graft or meta-knowledge-base has a newer
+- `.forgejo/workflows/graft-upgrade.yaml` runs weekly: if graft or knowledge-base-kit has a newer
   tag in its major, it opens a PR moving to it, gated by the whole `nix flake check` and quoting
   the provider's CHANGELOG. Both workflows carry `# managed by graft` and move with graft's pin;
-  delete that line to keep your own edits. python-starter's own pin follows `copier update`, not
+  delete that line to keep your own edits. python-kit's own pin follows `copier update`, not
   this bot.
   On a private repo Forgejo won't let the job token open a PR, so the bot uses the Actions secret
   `GRAFT_PR_TOKEN`: a `write:repository` token for a bot user (steward), so you review its PRs.
@@ -63,7 +63,7 @@ All template patterns and guides are available{% if graft_docs %} in `scions/pyt
 {% endif %}
 ## Project Structure
 
-This project uses the Python Starter Template architecture:
+This project uses the python-kit architecture:
 
 - **Functional service layer**: Services as pure functions
 - **Protocol-based DI**: Structural typing for flexibility
@@ -89,7 +89,7 @@ All other files may be updated when you run `copier update`.
 
 ## Need Help?
 
-- **Template documentation**: {% if graft_docs %}`scions/python-starter/docs/`{% else %}[python-starter docs]({{ ps }}/docs/architecture/architecture.md){% endif %}
+- **Template documentation**: {% if graft_docs %}`scions/python-kit/docs/`{% else %}[python-kit docs]({{ ps }}/docs/architecture/architecture.md){% endif %}
 - **Agent guidance**: `docs/agents.md`
 - **Project documentation**: `docs/README.md`
 

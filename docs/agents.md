@@ -1,5 +1,5 @@
 ---
-title: Python Starter Template - Agent Reference
+title: python-kit - Agent Reference
 status: stable
 owners: [template-team]
 ---

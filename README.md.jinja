@@ -1,4 +1,4 @@
-{%- if graft_docs %}{% set ps = "scions/python-starter" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-starter/blob/" ~ _copier_conf.vcs_ref_hash %}{%- endif %}
+{%- if graft_docs %}{% set ps = "scions/python-kit" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-kit/blob/" ~ _copier_conf.vcs_ref_hash %}{%- endif %}
 # {{ project_name }}
 
 {{ project_description }}
@@ -28,7 +28,7 @@ This template provides a solid foundation for building Python applications using
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd python-starter
+cd <your-project>
 
 # Install dependencies
 uv sync

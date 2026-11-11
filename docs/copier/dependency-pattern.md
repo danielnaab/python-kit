@@ -16,7 +16,7 @@ Traditional templates copy all docs into generated projects, creating duplicatio
 
 1. Template docs stay in the template (single source of truth)
 2. Generated projects **graft** them: a pinned copy of this template's export (`.gitattributes`:
-   the pattern docs and the sources they cite) in `scions/python-starter/`, at the commit the
+   the pattern docs and the sources they cite) in `scions/python-kit/`, at the commit the
    project was generated from (`_copier_conf.vcs_ref_hash`, in the rendered `flake.nix`)
 3. Generated docs link into `scions/`, so links resolve at the version the code came from
 4. `copier update` moves the pin with the code; `nix run .#graft` refreshes `scions/`
@@ -37,7 +37,7 @@ With `graft_docs: false`, the same links point at GitHub at that commit instead.
 ## Agent Discovery Flow
 
 1. Agent reads the project's `docs/agents.md`
-2. Follows its links into `scions/python-starter/docs/` (architecture, decisions, guides)
+2. Follows its links into `scions/python-kit/docs/` (architecture, decisions, guides)
 3. Applies patterns to project-specific code
 
 ## When Not to Use

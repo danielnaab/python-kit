@@ -1,2 +1,4 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-{{ _copier_answers|to_nice_yaml -}}
+{#- _src_path is the canonical URL whatever path the project was generated from, so `copier update` works from any
+    checkout (a local or graft-relative path only resolves where it was first run). #}
+{{ dict(_copier_answers, _src_path="https://github.com/danielnaab/python-kit")|to_nice_yaml -}}
