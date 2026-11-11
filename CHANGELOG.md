@@ -10,6 +10,13 @@ python-kit (formerly python-starter) is two things, and each entry says which on
 Generated projects with `graft_docs` pin python-kit to the commit they came from, so
 `copier update`, not graft's weekly PR, moves them between these versions.
 
+## v2.0.1 - 2026-11-11
+
+### Template
+
+- `TEMPLATE_STATUS.md` names the template's canonical URL as its repository (it showed Copier's temporary clone
+  directory, which changed on every update and caused a conflict), and says "generated from **python-kit**".
+
 ## v2.0.0 - 2026-11-11
 
 **Renamed:** python-starter is now **python-kit**: a kit you generate a project from and keep upgrading, with

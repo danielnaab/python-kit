@@ -1,7 +1,7 @@
 {%- if graft_docs %}{% set ps = "scions/python-kit" %}{% set mkb = "scions/knowledge-base-kit" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-kit/blob/" ~ _copier_conf.vcs_ref_hash %}{% set mkb = "https://github.com/danielnaab/knowledge-base-kit/blob/v2.0.0" %}{%- endif %}
 # Template Status - {{ project_name }}
 
-This project was generated from the **python-kit**.
+This project was generated from **python-kit**.
 
 ## Generation Info
 
@@ -63,7 +63,7 @@ All template patterns and guides are available{% if graft_docs %} in `scions/pyt
 {% endif %}
 ## Project Structure
 
-This project uses the python-kit architecture:
+This project uses python-kit's architecture:
 
 - **Functional service layer**: Services as pure functions
 - **Protocol-based DI**: Structural typing for flexibility
@@ -95,5 +95,5 @@ All other files may be updated when you run `copier update`.
 
 ## Template Source
 
-- Repository: `{{ _copier_conf.src_path }}`
+- Repository: https://github.com/danielnaab/python-kit
 - Reference: `{{ _copier_conf.vcs_ref_hash }}`
