@@ -64,6 +64,10 @@ By hand: the comment above `flake.nix`'s python-kit input says `copier update` m
 (or, this once, the v2.2.0 migration) moves it, and the update never touches `flake.nix` again, so edit that
 comment to say so.
 
+With a copier older than 9.15.1 (seen with 9.10.3), a project that rewrote `docs/README.md` gets one conflict there: v2.1.0's render
+still has the `**Version**` line this release drops. Keep your version. Copier 9.15.1 or later keeps it without a
+conflict. It happens only on this update.
+
 Nothing is deleted: stub example files a project without example code still has stay, and are yours to
 delete; an update won't bring them back, or `docs/agents.md`.
 
