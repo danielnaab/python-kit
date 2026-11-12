@@ -17,8 +17,9 @@ graft's weekly PR doesn't.
 
 - `include_github_actions` works. `.github` was also in `_exclude` unconditionally, so the option generated
   nothing, whatever the answer. With it, a project gets `.github/workflows/lint.yml` (`ruff check`,
-  `ruff format --check`) and `test.yml` (`pytest`; exit 5, no tests collected, passes), both set up with
-  `astral-sh/setup-uv` at the project's `python_version` and with read-only `contents` permission. The old
+  `ruff format --check`) and `test.yml` (`pytest`; exit 5, no tests collected, passes), both on
+  `actions/checkout@v7` and `astral-sh/setup-uv@v10.3.3` (it has no major-version tag) at the project's
+  `python_version`, with read-only `contents` permission. The old
   workflows, never rendered until now, would not have worked: GitHub's `${{ ... }}` expressions, which Jinja
   read as its own, uv's old install path, and a Codecov upload of a `coverage.xml` that pytest doesn't write.
 - `include_github_actions` defaults to `false`, which is what every project got before.
