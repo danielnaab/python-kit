@@ -93,9 +93,11 @@ Services are **pure functions** that take a context object:
 ```python
 from dataclasses import dataclass
 
+
 @dataclass(frozen=True)
 class ServiceContext:
     repository: Repository[Entity]
+
 
 def create_example(ctx: ServiceContext, name: str, value: int) -> Entity:
     """Service function - pure, testable, composable."""
@@ -118,6 +120,7 @@ Interfaces defined using `typing.Protocol` for structural typing:
 from typing import Protocol, Generic, TypeVar
 
 T = TypeVar("T")
+
 
 class Repository(Protocol, Generic[T]):
     def save(self, entity: T) -> None: ...

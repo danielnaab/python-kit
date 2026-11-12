@@ -179,7 +179,4 @@ class Entity:
         Returns:
             String representation showing key attributes
         """
-        return (
-            f"Entity(id={self.id!r}, name={self.name.text!r}, "
-            f"value={self.value.amount})"
-        )
+        return f"Entity(id={self.id!r}, name={self.name.text!r}, value={self.value.amount})"

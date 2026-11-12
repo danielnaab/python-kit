@@ -22,6 +22,9 @@ graft's weekly PR doesn't.
   workflows, never rendered until now, would not have worked: GitHub's `${{ ... }}` expressions, which Jinja
   read as its own, uv's old install path, and a Codecov upload of a `coverage.xml` that pytest doesn't write.
 - `include_github_actions` defaults to `false`, which is what every project got before.
+- A new project passes `ruff format --check`, as the lint workflow requires: `README.md`'s code examples
+  and `Entity.__repr__` in `domain/entity.py` are formatted. Both files are in `_skip_if_exists`, so an update
+  doesn't touch them in an existing project.
 
 Upgrading: nothing changes for a project whose `.copier-answers.yml` has `include_github_actions: false`. With
 `true` recorded (the old default), `copier update` adds the two workflows; to keep them out, run
