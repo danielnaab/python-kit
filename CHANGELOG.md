@@ -11,6 +11,23 @@ Generated projects with `graft_docs` pin python-kit to the commit they came from
 v2.2.0 the python-kit-upgrade PR moves that pin with each `copier update` (before, the update's merge did);
 graft's weekly PR doesn't.
 
+## v2.3.0 - 2026-11-11
+
+### Template
+
+- `include_github_actions` works. `.github` was also in `_exclude` unconditionally, so the option generated
+  nothing, whatever the answer. With it, a project gets `.github/workflows/lint.yml` (`ruff check`,
+  `ruff format --check`) and `test.yml` (`pytest`; exit 5, no tests collected, passes), both set up with
+  `astral-sh/setup-uv` at the project's `python_version` and with read-only `contents` permission. The old
+  workflows, never rendered until now, would not have worked: GitHub's `${{ ... }}` expressions, which Jinja
+  read as its own, uv's old install path, and a Codecov upload of a `coverage.xml` that pytest doesn't write.
+- `include_github_actions` defaults to `false`, which is what every project got before.
+
+Upgrading: nothing changes for a project whose `.copier-answers.yml` has `include_github_actions: false`. With
+`true` recorded (the old default), `copier update` adds the two workflows; to keep them out, run
+`copier update -d include_github_actions=false`. On GitHub they run on push and pull requests to `main`; on
+Forgejo, only if the project has no `.forgejo/workflows/` (one with `graft_docs` has).
+
 ## v2.2.0 - 2026-11-11
 
 ### Template

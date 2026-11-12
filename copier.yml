@@ -14,7 +14,6 @@ _templates_suffix: .jinja
 _exclude:
   - copier.yml
   - .git
-  - .github
   - .venv
   - __pycache__
   - "*.pyc"
@@ -38,6 +37,9 @@ _exclude:
   - docs/guides
   - docs/reference
   - knowledge-base.yaml  # Template KB config, not for generated projects
+  # .github holds only the generated project's workflows (python-kit has none of its own), so it is
+  # excluded only without include_github_actions. Before v2.3.0 it was also excluded unconditionally, above,
+  # and the option generated nothing.
   - "{% if not include_github_actions %}.github{% endif %}"
   - "{% if not include_dev_scripts %}scripts{% endif %}"
   # Generated once: an update neither changes docs/agents.md nor brings it back once deleted (with
@@ -136,8 +138,8 @@ include_example_code:
 
 include_github_actions:
   type: bool
-  help: Include GitHub Actions CI/CD workflows?
-  default: true
+  help: Include GitHub Actions workflows (lint and test)?
+  default: false
 
 include_dev_scripts:
   type: bool

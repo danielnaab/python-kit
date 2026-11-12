@@ -20,7 +20,7 @@ This repository is a [Copier](https://copier.readthedocs.io/) template. Users ru
 | `author_email` | str | "you@example.com" | Email (validated) |
 | `python_version` | choice | "3.11" | Min Python: 3.10, 3.11, 3.12 |
 | `include_example_code` | bool | true | Full working examples |
-| `include_github_actions` | bool | true | CI/CD workflows |
+| `include_github_actions` | bool | false | GitHub Actions lint and test workflows |
 | `include_dev_scripts` | bool | true | Setup/test scripts |
 | `license` | choice | "MIT" | MIT, Apache-2.0, BSD-3-Clause, GPL-3.0, Proprietary |
 
@@ -46,7 +46,9 @@ lists them under `{% if not include_example_code %}` (as docstring-only stubs, e
 recreated them in a project that had deleted them).
 
 Conditional features:
-- `include_github_actions` — `.github/workflows/` lint and test workflows
+- `include_github_actions` — `.github/workflows/lint.yml` (ruff check and format) and `test.yml` (pytest,
+  where no tests collected passes), both on uv. Off by default: projects on Forgejo run CI there, and Forgejo
+  falls back to `.github/workflows/` only when there is no `.forgejo/workflows/`
 - `include_dev_scripts` — `scripts/setup.sh` and `scripts/test.sh`
 - `graft_docs` — `flake.nix` (grafts python-kit's docs and knowledge-base-kit into `scions/`) and the Forgejo
   workflows: graft's `graft-check` and `graft-upgrade`, and python-kit's own `python-kit-upgrade`
