@@ -34,6 +34,8 @@ both at once, by hand (below). A project generated with `graft_docs: false` has 
   as before. Its major-version warning names both steps.
 - graft's workflows (`graft-check`, `graft-upgrade`) are graft v2.13.0's. They are in `_skip_if_exists`, so an
   update doesn't change them in an existing project: `nix run .#graft sync` does.
+- `docs/agents.md` (new projects; `_skip_if_exists`): ask before editing a scion, fix it in the provider, and
+  build with a scion's uncommitted edits through `nix run .#graft -- try NAME` / `try --stop`.
 - Links that don't graft (`graft_docs: false`) point at knowledge-base-kit v2.2.0 (were v2.0.0).
 - The v2.2.0 migration (move `flake.nix`'s python-kit pin) does nothing in a flake with no python-kit input and
   `submodules` in it, so an update from before v2.2.0 straight to v3 doesn't fail on a flake you already moved.

@@ -57,9 +57,12 @@ When code and docs conflict, **code is correct**.
 - [Reference]({{ ps }}/docs/reference/project-reference.md) — structure, config, tooling
 {% if graft_docs %}
 These are scions: git submodules in `scions/` at release tags (see `scions/README.md`). If one is empty, run
-`git submodule update --init`. Read them; fix a python-kit or knowledge-base-kit bug only as a change to that
-repository (its own branch and pull request), then take the release with `nix run .#graft upgrade NAME`.
-`nix run .#graft check` fails while a scion has uncommitted edits or sits on an unreleased commit.
+`git submodule update --init --recursive`. Read them; ask before you edit one: fix a python-kit or
+knowledge-base-kit bug only as a change to that repository (its own branch and pull request), then take the
+release with `nix run .#graft upgrade NAME@TAG`. To build with a scion's uncommitted edits, run
+`nix run .#graft -- try NAME`, build with the command it prints, then `nix run .#graft -- try --stop`.
+`nix run .#graft check` fails while try is on, or while a scion has uncommitted edits or sits on an unreleased
+commit.
 {% endif %}
 
 ## Sources
