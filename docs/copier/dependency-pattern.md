@@ -15,12 +15,12 @@ Traditional templates copy all docs into generated projects, creating duplicatio
 ## Solution
 
 1. Template docs stay in the template (single source of truth)
-2. Generated projects **graft** them: a pinned copy of this template's export (`.gitattributes`:
-   the pattern docs and the sources they cite) in `scions/python-kit/`, at the commit the
-   project was generated from (`_copier_conf.vcs_ref_hash`, in the rendered `flake.nix`)
+2. Generated projects **graft** them: python-kit's repository as a git submodule in `scions/python-kit/`,
+   at the release tag the project was generated from (copier.yml's copy task, `graft add`)
 3. Generated docs link into `scions/`, so links resolve at the version the code came from
-4. The project's `flake.nix` is its own (`copier update` skips it): the python-kit-upgrade workflow runs
-   `copier update` and moves the pin to the same tag; `nix run .#graft` refreshes `scions/`
+4. The python-kit-upgrade workflow runs `copier update` and moves `scions/python-kit` to the same tag
+   (`graft upgrade python-kit@vX.Y.Z`); the project's `flake.nix` is its own (`copier update` skips it)
+   and names no scion
 
 With `graft_docs: false`, the same links point at GitHub at that commit instead.
 

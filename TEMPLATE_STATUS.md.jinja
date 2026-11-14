@@ -1,4 +1,4 @@
-{%- if graft_docs %}{% set ps = "scions/python-kit" %}{% set mkb = "scions/knowledge-base-kit" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-kit/blob/" ~ _copier_conf.vcs_ref_hash %}{% set mkb = "https://github.com/danielnaab/knowledge-base-kit/blob/v2.0.0" %}{%- endif %}
+{%- if graft_docs %}{% set ps = "scions/python-kit" %}{% set mkb = "scions/knowledge-base-kit" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-kit/blob/" ~ _copier_conf.vcs_ref_hash %}{% set mkb = "https://github.com/danielnaab/knowledge-base-kit/blob/v2.2.0" %}{%- endif %}
 # Template Status - {{ project_name }}
 
 This project was generated from **python-kit**.
@@ -38,25 +38,25 @@ Copier will:
 - Show conflicts for manual resolution
 - Run the template's migrations for the versions it crosses (`_migrations` in python-kit's `copier.yml`)
 {% if graft_docs %}
-`flake.nix` is this project's: the update doesn't touch it. Move its python-kit input to the commit of the
-tag you updated to (`git ls-remote https://github.com/danielnaab/python-kit 'refs/tags/vX.Y.Z^{}'`), then
-`nix run .#graft`, which re-locks it and rebuilds `scions/`. Commit `flake.nix`, `flake.lock` and `scions/`
-with the update. The weekly PR below does all of this.
+`scions/python-kit` is a git submodule at the python-kit tag this project was generated or last updated from.
+After the update, move it to the tag you updated to: `nix run .#graft upgrade python-kit@vX.Y.Z`. Commit the
+moved `scions/python-kit` with the update. `flake.nix` is this project's: the update doesn't touch it. The
+weekly PR below does all of this.
 
 ### The weekly update PR
 
 `.forgejo/workflows/python-kit-upgrade.yaml` runs weekly (Mondays 06:41 UTC): if python-kit has a newer
-tag in the major this project is on, it runs `copier update` to it, moves `flake.nix`'s python-kit pin (and
-nothing else in it) to that tag's commit, then `nix run .#graft`, `nix flake check` and
-the tests, pushes the result to `python-kit/upgrade` and opens a PR quoting python-kit's CHANGELOG. Conflicts
+tag in the major this project is on, it runs `copier update` to it, moves `scions/python-kit` to that tag
+(`graft upgrade python-kit@vX.Y.Z`), commits, then runs `nix flake check`, `graft check` and the tests on the
+commit, pushes the result to `python-kit/upgrade` and opens a PR quoting python-kit's CHANGELOG. Conflicts
 and failing checks are pushed too, and named in the PR's title. A new major is never taken: the run warns,
-and you update by hand after reading its Migration section. It opens the PR with the same
+and you update by hand after reading its Upgrading section. It opens the PR with the same
 `GRAFT_PR_TOKEN` secret as graft's bot (below), and leaves a PR that changes `.forgejo/` workflows for
 you to open after reading the diff. The file is template-managed: delete it to stop the bot.
 {% endif %}
 ## Template Documentation
 
-All template patterns and guides are available{% if graft_docs %} in `scions/python-kit/docs/`, pinned to this project's template commit{% else %} on GitHub, at this project's template commit{% endif %}:
+All template patterns and guides are available{% if graft_docs %} in `scions/python-kit/docs/`, at this project's python-kit release{% else %} on GitHub, at this project's template commit{% endif %}:
 
 - [Architecture Patterns]({{ ps }}/docs/architecture/architecture.md)
 - [Architectural Decisions]({{ ps }}/docs/decisions/001-why-uv.md)
@@ -66,7 +66,12 @@ All template patterns and guides are available{% if graft_docs %} in `scions/pyt
 {% if graft_docs %}
 ### Keeping the grafted docs current
 
-- `.forgejo/workflows/graft-check.yaml` checks on every PR that `scions/` matches `flake.lock`.
+Each folder in `scions/` is a git submodule (`scions/README.md` says more): another repository, checked out at
+a release tag. After a clone, fill them with `git submodule update --init` (or `nix run .#graft sync`); Nix
+fetches them itself for `nix flake check`.
+
+- `.forgejo/workflows/graft-check.yaml` checks on every PR that every scion is a registered submodule at a
+  release tag, that graft's workflows are current, and that the flake evaluates.
 - `.forgejo/workflows/graft-upgrade.yaml` runs weekly: if graft or knowledge-base-kit has a newer
   tag in its major, it opens a PR moving to it, gated by the whole `nix flake check` and quoting
   the provider's CHANGELOG. Both workflows carry `# managed by graft` and move with graft's pin;
@@ -76,7 +81,7 @@ All template patterns and guides are available{% if graft_docs %} in `scions/pyt
   `GRAFT_PR_TOKEN`: a `write:repository` token for a bot user (steward), so you review its PRs.
   A user-level secret (your Settings > Actions > Secrets) covers every repo you own; a repo-level
   one covers just this repo. Without it the run pushes `graft/upgrade` and fails with a compare link.
-- By hand: `nix run .#graft-outdated`, `nix run .#graft-upgrade`.
+- By hand: `nix run .#graft outdated`, `nix run .#graft upgrade`, `nix run .#graft check`.
 {% endif %}
 ## Project Structure
 
@@ -101,7 +106,7 @@ Files protected from updates (you can modify freely):
 {% endif %}- `README.md`
 - `knowledge-base.yaml`
 {% if graft_docs %}- `.forgejo/workflows/graft-check.yaml`, `.forgejo/workflows/graft-upgrade.yaml` (graft-upgrade moves them)
-- `flake.nix` (graft-upgrade moves graft's pins, python-kit-upgrade the python-kit one)
+- `flake.nix` (graft-upgrade moves graft's pin; the scions are submodules, not named here)
 {% endif %}
 `docs/agents.md` is generated once: `copier update` and `copier recopy` never change it, and an update doesn't bring it back if you delete it.
 

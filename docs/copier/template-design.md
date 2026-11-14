@@ -50,15 +50,18 @@ Conditional features:
   where no tests collected passes), both on uv. Off by default: projects on Forgejo run CI there, and Forgejo
   falls back to `.github/workflows/` only when there is no `.forgejo/workflows/`
 - `include_dev_scripts` — `scripts/setup.sh` and `scripts/test.sh`
-- `graft_docs` — `flake.nix` (grafts python-kit's docs and knowledge-base-kit into `scions/`) and the Forgejo
-  workflows: graft's `graft-check` and `graft-upgrade`, and python-kit's own `python-kit-upgrade`
+- `graft_docs` — `flake.nix` (graft v2.13.0's `mkFlake`; it names no scion) and the Forgejo workflows: graft's
+  `graft-check` and `graft-upgrade`, and python-kit's own `python-kit-upgrade`. The copy's tasks graft python-kit
+  (at the tag being generated from) and knowledge-base-kit into `scions/` as git submodules (`graft add`)
 
 ## Post-Generation
 
 Copier runs automatically after generation:
 1. `uv sync` — install dependencies
 2. `git init` — initialize repository
-3. `git add .` && `git commit` — initial commit
+3. `git add .`; with `graft_docs`, `nix run .#graft add` for `scions/python-kit` and
+   `scions/knowledge-base-kit` (git submodules at release tags)
+4. `git commit` — initial commit
 
 ## Template Updates
 
@@ -70,15 +73,14 @@ copier update
 
 `copier update` runs the `_migrations` in `copier.yml` for each version it crosses: commands for what
 the update itself can't do, such as renaming paths in the files it skips. Each release's CHANGELOG
-"Migration" section says what is left to do by hand. With `graft_docs`, the generated
+"Upgrading" (earlier: "Migration") section says what is left to do by hand. With `graft_docs`, the generated
 `python-kit-upgrade` workflow runs the update weekly and opens a PR.
 
 Protected files (`_skip_if_exists`, generated when missing, never overwritten): with example code,
 domain/entity.py, example_service.py, in_memory_repository.py, CLI commands and unit/integration tests; always
 README.md, docs/agents.md, knowledge-base.yaml, and with `graft_docs` graft's two workflows (graft-upgrade moves them) and
-`flake.nix`. The project owns `flake.nix`: graft-upgrade moves graft's pins, and python-kit-upgrade moves the
-python-kit pin to the tag it updated to (the v2.2.0 migration does it once, for the update that introduced
-this). `docs/agents.md` is generated once: `_exclude` also lists it when `_copier_operation == 'update'`, so an
+`flake.nix`. The project owns `flake.nix`: graft-upgrade moves graft's pin, and python-kit-upgrade moves the
+`scions/python-kit` submodule to the tag it updated to (`graft upgrade python-kit@vX.Y.Z`). `docs/agents.md` is generated once: `_exclude` also lists it when `_copier_operation == 'update'`, so an
 update neither changes it nor recreates it after deletion (copier 9.10.3+, the first to apply the new
 `_exclude` to the old render: older ones delete a newly excluded file).
 

@@ -77,9 +77,10 @@ _skip_if_exists:
   # `# managed by graft` line), so a python-kit update never conflicts with or reverts them.
   - .forgejo/workflows/graft-check.yaml
   - .forgejo/workflows/graft-upgrade.yaml
-  # flake.nix is the project's: graft-upgrade moves graft and its other pins, and python-kit-upgrade (or the
-  # v2.2.0 migration, or you, after a manual update) moves the python-kit pin alone. A python-kit update that
-  # rewrote it conflicted with every project whose flake.nix had changed.
+  # flake.nix is the project's: graft-upgrade moves graft's pin. From v3.0.0 it names no scion: scions/ holds git
+  # submodules, and python-kit-upgrade (or you, after a manual update: `nix run .#graft upgrade python-kit@vX.Y.Z`)
+  # moves scions/python-kit. A python-kit update that rewrote flake.nix conflicted with every project whose
+  # flake.nix had changed.
   - flake.nix
 
 # Template questions (user prompts)
@@ -149,8 +150,9 @@ include_dev_scripts:
 graft_docs:
   type: bool
   help: >-
-    Graft pinned copies of python-kit's pattern docs and knowledge-base-kit into scions/?
-    Needs Nix. Without it, docs link to GitHub at this template's commit instead.
+    Graft python-kit's pattern docs and knowledge-base-kit into scions/ (git submodules at release
+    tags, through graft)? Needs Nix 2.27 or later. Without it, docs link to GitHub at this template's commit
+    instead.
   default: true
 
 license:
@@ -195,8 +197,21 @@ _tasks:
 
   # Graft the docs before the first commit: README.md and docs/ link into scions/, so a commit
   # without it has broken links (and a link-checking commit hook rejects it, which makes Copier
-  # delete the new project). The flake needs its files tracked first, hence after `git add`.
-  - command: nix run .#graft
+  # delete the new project). The flake needs its files tracked first, hence after `git add`. Each
+  # scion is a git submodule at a release tag: python-kit at the tag this project is generated from
+  # (the newest, when generated from an untagged commit), knowledge-base-kit at the version these
+  # docs cite. graft add writes scions/README.md and stages it with the submodule.
+  - command: |
+      set -eu
+      commit='{{ _copier_answers._commit | default("", true) }}'
+      python_kit=https://github.com/danielnaab/python-kit
+      if printf '%s\n' "$commit" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+        python_kit=$python_kit@$commit
+      else
+        echo "python-kit: generated from ${commit:-an untagged checkout}, not a release: grafting python-kit's newest release"
+      fi
+      nix run .#graft -- add "$python_kit"
+      nix run .#graft -- add https://github.com/danielnaab/knowledge-base-kit@v2.2.0
     when: "{{ _copier_operation == 'copy' and graft_docs }}"
 
   - command: git add .
@@ -290,6 +305,8 @@ _migrations:
           sys.exit(0)
       pin = re.compile(r'^([^#\n]*\burl\s*=\s*"github:danielnaab/python-kit/)[^"]*(")', re.M)
       text = path.read_text(encoding="utf-8")
+      if not pin.findall(text) and "submodules" in text:
+          sys.exit(0)  # graft v2.13.0 or later: no python-kit input; python-kit is a submodule (v3.0.0)
       if len(pin.findall(text)) != 1:
           sys.exit('python-kit v2.2.0 migration: flake.nix has no single url = "github:danielnaab/python-kit/..." '
                    "line: set the python-kit input to {{ _copier_conf.vcs_ref_hash }} by hand")

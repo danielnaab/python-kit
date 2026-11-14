@@ -1,23 +1,17 @@
 {
   description = "{{ project_name }}";
 
-  # graft (https://github.com/danielnaab/graft/tree/v2) copies pinned exports of the docs this project
-  # follows into scions/: `nix run .#graft`, then commit scions/. `nix flake check` fails if scions/
-  # drifts from flake.lock. `nix run .#graft -- upgrade` moves graft itself, its workflows and each
-  # tag-pinned scion to the newest tag in its major; the weekly bot does the same as a PR.
-  inputs.graft.url = "github:danielnaab/graft/v2.9.0";
-  inputs.knowledge-base-kit = {
-    url = "github:danielnaab/knowledge-base-kit/v2.0.0";
-    flake = false;
-  };
-  # The python-kit commit this project was generated or last updated from: python-kit-upgrade moves
-  # it with each update (after a manual `copier update`, set it to the new tag's commit), so the
-  # pattern docs in scions/ match the template the code came from. This file is the project's:
-  # `copier update` doesn't touch it.
-  inputs.python-kit = {
-    url = "github:danielnaab/python-kit/{{ _copier_conf.vcs_ref_hash }}";
-    flake = false;
-  };
+  # graft (https://github.com/danielnaab/graft) grafts the docs this project follows into scions/ as git
+  # submodules, each at a release tag: scions/python-kit (the pattern docs, at the python-kit version
+  # this project was generated or last updated from) and scions/knowledge-base-kit. The submodule
+  # commit is the pin; this file names no scion. Empty scions/ folders after a clone:
+  # `git submodule update --init` (or `nix run .#graft sync`). `nix run .#graft check` fails until
+  # every scion is clean and at a release tag; `nix run .#graft upgrade` moves graft and each scion to
+  # the newest tag in its major, and the weekly bot does the same as a PR. python-kit-upgrade moves
+  # scions/python-kit with each `copier update`. This file is the project's: `copier update` doesn't
+  # touch it.
+  inputs.self.submodules = true;  # Nix >= 2.27: the flake's source includes the scions
+  inputs.graft.url = "github:danielnaab/graft/v2.13.0";
 
   outputs = inputs: inputs.graft.lib.mkFlake { inherit inputs; };
 }

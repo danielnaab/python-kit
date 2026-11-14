@@ -1,6 +1,6 @@
-# What python-kit exports to projects that graft it (https://github.com/danielnaab/graft/tree/v2):
-# the pattern docs generated projects link to, the template sources those docs cite as evidence,
-# and CHANGELOG.md.
+# What `git archive` of python-kit holds: the pattern docs generated projects link to, the template
+# sources those docs cite as evidence, and CHANGELOG.md. graft v2.13.0 and later doesn't read these
+# rules: a project grafts python-kit's whole repository as a git submodule (scions/python-kit).
 # The rest (READMEs, scripts, CI, the template's own agent docs and KB config) is the template's own.
 *                     export-ignore
 /docs                 -export-ignore

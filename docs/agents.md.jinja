@@ -1,4 +1,4 @@
-{%- if graft_docs %}{% set ps = "../scions/python-kit" %}{% set mkb = "../scions/knowledge-base-kit" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-kit/blob/" ~ _copier_conf.vcs_ref_hash %}{% set mkb = "https://github.com/danielnaab/knowledge-base-kit/blob/v2.0.0" %}{%- endif %}
+{%- if graft_docs %}{% set ps = "../scions/python-kit" %}{% set mkb = "../scions/knowledge-base-kit" %}{%- else %}{% set ps = "https://github.com/danielnaab/python-kit/blob/" ~ _copier_conf.vcs_ref_hash %}{% set mkb = "https://github.com/danielnaab/knowledge-base-kit/blob/v2.2.0" %}{%- endif %}
 ---
 title: {{ project_name }} - Agent Entrypoint
 status: working
@@ -56,7 +56,10 @@ When code and docs conflict, **code is correct**.
 - [Getting started]({{ ps }}/docs/guides/getting-started.md) and [development]({{ ps }}/docs/guides/development.md)
 - [Reference]({{ ps }}/docs/reference/project-reference.md) — structure, config, tooling
 {% if graft_docs %}
-These are scions: pinned copies grafted into `scions/` (see `scions/README.md`); never edit them.
+These are scions: git submodules in `scions/` at release tags (see `scions/README.md`). If one is empty, run
+`git submodule update --init`. Read them; fix a python-kit or knowledge-base-kit bug only as a change to that
+repository (its own branch and pull request), then take the release with `nix run .#graft upgrade NAME`.
+`nix run .#graft check` fails while a scion has uncommitted edits or sits on an unreleased commit.
 {% endif %}
 
 ## Sources
