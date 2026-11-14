@@ -59,8 +59,9 @@ When code and docs conflict, **code is correct**.
 These are scions: git submodules in `scions/` at release tags (see `scions/README.md`). If one is empty, run
 `git submodule update --init --recursive`. Read them; ask before you edit one: fix a python-kit or
 knowledge-base-kit bug only as a change to that repository (its own branch and pull request), then take the
-release with `nix run .#graft upgrade NAME@TAG`. To build with a scion's uncommitted edits, run
-`nix run .#graft -- try NAME`, build with the command it prints, then `nix run .#graft -- try --stop`.
+release with `nix run .#graft upgrade NAME@TAG`. To build with a scion's uncommitted edits (a new file counts
+once it is `git add`-ed in the scion), run `nix run .#graft -- try NAME`, build with the command it prints, then
+`nix run .#graft -- try --stop`; run `try --stop` before `git stash` here: stash fails while try is on.
 `nix run .#graft check` fails while try is on, or while a scion has uncommitted edits or sits on an unreleased
 commit.
 {% endif %}
