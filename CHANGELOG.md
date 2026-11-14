@@ -3,13 +3,91 @@
 python-kit (formerly python-starter) is two things, and each entry says which one changed:
 
 - **Template**: what `copier copy` / `copier update` puts in a generated project.
-- **Exported docs**: what a repo that grafts python-kit gets in `scions/python-kit/`
-  (`.gitattributes`: `docs/architecture`, `docs/decisions`, `docs/guides`, `docs/reference`, the
-  `src/` and `tests/` they cite, `copier.yml`, `pyproject.toml.jinja`, and this file).
+- **Exported docs**: what a repo that grafts python-kit reads in `scions/python-kit/`: from v3.0.0 the whole
+  repository, as a git submodule; the docs it links to are `docs/architecture`, `docs/decisions`, `docs/guides`,
+  `docs/reference`, and the `src/` and `tests/` they cite. (Before v3.0.0, graft copied the `.gitattributes`
+  export only.)
 
-Generated projects with `graft_docs` pin python-kit to the commit they came from, in their `flake.nix`. From
-v2.2.0 the python-kit-upgrade PR moves that pin with each `copier update` (before, the update's merge did);
-graft's weekly PR doesn't.
+Generated projects with `graft_docs` pin python-kit to the release they came from: from v3.0.0 the
+`scions/python-kit` submodule's commit, at a release tag (before, an input in their `flake.nix`). The
+python-kit-upgrade PR moves it with each `copier update`; graft's weekly PR doesn't.
+
+## v3.0.0 - 2026-11-13
+
+For graft v2.13.0, which pins scions with git submodules instead of copies: a project with `graft_docs` moves to
+both at once, by hand (below). A project generated with `graft_docs: false` has nothing to move.
+
+### Template
+
+- `flake.nix` is graft v2.13.0's consumer flake: `inputs.self.submodules = true`, graft's `mkFlake`, and no
+  scion inputs (the `python-kit` and `knowledge-base-kit` inputs are gone). `scions/python-kit` and
+  `scions/knowledge-base-kit` are git submodules, each at a release tag, so the pin is the submodule's commit and
+  `flake.lock` pins graft alone. Needs Nix 2.27 or later.
+- A new project's copy tasks graft them with `nix run .#graft -- add`: python-kit at the tag the project is
+  generated from (its newest release, with a note, when generated from an untagged commit), knowledge-base-kit
+  at v2.2.0. Links from a generated `README.md`, `TEMPLATE_STATUS.md` and `docs/` are unchanged: the same paths
+  exist in the whole repositories.
+- python-kit-upgrade moves `scions/python-kit` to the tag it updated to (`nix run .#graft upgrade
+  python-kit@vX.Y.Z`, which records the new commit without cloning the submodule) instead of rewriting
+  `flake.nix`. It commits first and runs `nix flake check`, `graft check --committed` and the tests on the commit,
+  because Nix reads a clean git flake's scions at the commits it records; the result goes in the commit message
+  as before. Its major-version warning names both steps.
+- graft's workflows (`graft-check`, `graft-upgrade`) are graft v2.13.0's. They are in `_skip_if_exists`, so an
+  update doesn't change them in an existing project: `nix run .#graft sync` does.
+- Links that don't graft (`graft_docs: false`) point at knowledge-base-kit v2.2.0 (were v2.0.0).
+- The v2.2.0 migration (move `flake.nix`'s python-kit pin) does nothing in a flake with no python-kit input and
+  `submodules` in it, so an update from before v2.2.0 straight to v3 doesn't fail on a flake you already moved.
+
+### Upgrading
+
+python-kit-upgrade never takes a new major, so its weekly run only warns. Do these steps by hand, in the
+project's top directory, on a branch, and commit them as one change: v3's workflows expect the scions as
+submodules, so a `copier update` to v3.0.0 merged without the graft move (steps 3 to 6) breaks the project's
+checks.
+
+Projects generated with `graft_docs: false` (no `flake.nix`, no `.forgejo/`): run
+`copier update --trust --vcs-ref v3.0.0`, check the result, commit. Nothing else.
+
+With `graft_docs: true`:
+
+1. Check that Nix is 2.27 or later: `nix --version`.
+2. Update the template, from a clean tree (copier refuses a dirty one): `copier update --trust --vcs-ref
+   v3.0.0`. Resolve conflicts, if any. Don't commit yet.
+3. Remove the copied scions: `git rm -r -q scions`.
+4. Replace `flake.nix` with the shape below. Keep your own `description`, and any outputs you added to
+   `mkFlake` (its `outputs = { ... };` argument stays as it was). Delete the `python-kit` and
+   `knowledge-base-kit` inputs.
+
+   ```nix
+   {
+     description = "Your project";
+     inputs.self.submodules = true;
+     inputs.graft.url = "github:danielnaab/graft/v2.13.0";
+     outputs = inputs: inputs.graft.lib.mkFlake { inherit inputs; };
+   }
+   ```
+
+5. Graft the two scions as submodules:
+
+   ```bash
+   nix run github:danielnaab/graft/v2.13.0 -- add https://github.com/danielnaab/python-kit@v3.0.0
+   nix run github:danielnaab/graft/v2.13.0 -- add https://github.com/danielnaab/knowledge-base-kit@v2.2.0
+   ```
+
+6. Re-lock graft and refresh graft's README and workflows: `nix flake update graft`, then
+   `nix run .#graft sync`.
+7. Fix your own references to the old copies, if any: a `PYTHONPATH=scions/knowledge-base-kit/src` in CI keeps
+   working once the CI checkout fills the submodules (GitHub's `actions/checkout` needs `submodules: true`).
+   In a repo rule that said never to edit `scions/`, say instead that a scion is a git submodule: fix it as a
+   change to its own repository, then `nix run .#graft upgrade NAME`.
+8. Verify: `nix flake check`, `nix run .#graft check` (every scion clean and at a release tag), and the tests
+   (`uv run pytest`).
+9. Commit everything (`flake.nix`, `flake.lock`, `.gitmodules`, `scions/`, `.forgejo/`, the update) together,
+   then push. From then on the weekly bots work as before: python-kit-upgrade moves `scions/python-kit`, and
+   graft-upgrade moves graft and `scions/knowledge-base-kit`.
+
+A clone made before or after this change gets empty `scions/` folders until `git submodule update --init` (or
+`nix run .#graft sync`). Nix fetches them itself, so `nix flake check` works without it.
 
 ## v2.3.0 - 2026-11-11
 
