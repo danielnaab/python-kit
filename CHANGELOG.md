@@ -12,6 +12,13 @@ Generated projects with `graft_docs` pin python-kit to the release they came fro
 `scions/python-kit` submodule's commit, at a release tag (before, an input in their `flake.nix`). The
 python-kit-upgrade PR moves it with each `copier update`; graft's weekly PR doesn't.
 
+## v3.0.1 - 2026-11-14
+
+### Template
+
+- Fixed: `flake.nix` pins graft v2.13.1: graft v2.13.0 can't be a flake input. A project generated from v3.0.0
+  moves `inputs.graft.url` to `github:danielnaab/graft/v2.13.1` and runs `nix flake update graft`.
+
 ## v3.0.0 - 2026-11-13
 
 For graft v2.13.0, which pins scions with git submodules instead of copies: a project with `graft_docs` moves to

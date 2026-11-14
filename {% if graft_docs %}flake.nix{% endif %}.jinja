@@ -11,7 +11,7 @@
   # scions/python-kit with each `copier update`. This file is the project's: `copier update` doesn't
   # touch it.
   inputs.self.submodules = true;  # Nix >= 2.27: the flake's source includes the scions
-  inputs.graft.url = "github:danielnaab/graft/v2.13.0";
+  inputs.graft.url = "github:danielnaab/graft/v2.13.1";
 
   outputs = inputs: inputs.graft.lib.mkFlake { inherit inputs; };
 }
